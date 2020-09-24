@@ -19,17 +19,4 @@ USER genie
 
 RUN julia -e "using Pkg; Pkg.activate(\".\"); Pkg.instantiate(); Pkg.precompile(); "
 
-# ports
-EXPOSE 8000
-EXPOSE 80
-
-# websockets ports
-EXPOSE 8001
-EXPOSE 8001
-
-ENV JULIA_DEPOT_PATH "/home/genie/.julia"
-ENV GENIE_ENV "dev"
-ENV HOST "127.0.0.1"
-ENV PORT "8000"
-
 CMD ["bin/server"]
