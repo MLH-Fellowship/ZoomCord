@@ -1,0 +1,25 @@
+version: '3.6'
+services:
+    genie:
+        build:
+            context: Geniejl/
+        volumes:
+            - "./Geniejl:/Geniejl"
+        expose: 
+            - "8000"
+        env_file: 
+            - config.env
+        command: >
+            sh -c "julia --project=/Geniejl -e \"using Pkg; Pkg.instantiate(); Pkg.precompile();\" &&
+                    chmod +x bin/server &&
+                    bin/server"
+        restart: always
+    caddy:
+        build: 
+            context: Caddy/
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on: 
+            - "genie"
+        restart: always
