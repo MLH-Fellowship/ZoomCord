@@ -1,0 +1,8 @@
+[deps]
+Discord = "fcbf000d-02fd-53f1-af91-d952191673d3"
+Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+LoggingExtras = "e6f89c97-d47a-5376-807f-9c37f3926c36"
+MbedTLS = "739be429-bea8-5141-9913-cc70e7f3736d"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
