@@ -1,0 +1,15 @@
+zoomcord.ml:443 {
+    reverse_proxy http://genie:8000
+
+    tls {
+        on_demand
+    }
+}
+
+www.zoomcord.ml:443 {
+    reverse_proxy http://genie:8000
+
+    tls {
+        on_demand
+    }
+}
