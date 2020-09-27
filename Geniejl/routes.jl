@@ -14,6 +14,7 @@ end
 route("/auth/*") do 
   code = haskey(@params, :code) ? @params(:code) : ""
   discordId = haskey(@params, :state) ? @params(:state) : 0
+  return code
 
   user_check = findone(User; :discordId => discordId)
   if user_check !== nothing
