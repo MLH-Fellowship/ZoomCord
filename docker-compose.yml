@@ -28,5 +28,5 @@ services:
         restart: always
 
 volumes: 
-    - caddy_data:
-    - caddy_config:
+    caddy_data:
+    caddy_config:
