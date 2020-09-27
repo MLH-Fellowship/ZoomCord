@@ -14,7 +14,6 @@ end
 route("/auth/*") do 
   code = haskey(@params, :code) ? @params(:code) : ""
   discordId = haskey(@params, :state) ? @params(:state) : 0
-  return code
 
   user_check = findone(User; :discordId => discordId)
   if user_check !== nothing
@@ -23,7 +22,7 @@ route("/auth/*") do
 
   auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
 
-  req = HTTP.post("https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml/auth/"; 
+  req = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml/auth/"; 
   headers= ["Authorization" => "Basic $auth"])
 
   accessToken = req.body["access_token"]
