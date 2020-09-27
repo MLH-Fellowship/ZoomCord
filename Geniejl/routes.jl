@@ -15,6 +15,11 @@ end
 route("/auth/*") do 
   code = haskey(@params, :code) ? @params(:code) : ""
   discordId = haskey(@params, :state) ? @params(:state) : 0
+  responsetype = haskey(@params, :response_type) ? @params(:response_type) == "code" : false
+
+  if !responsetype
+    return serve_static_file("auth.html")
+  end
 
   user_check = findone(User; :discordId => discordId)
   if user_check !== nothing
