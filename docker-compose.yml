@@ -26,3 +26,7 @@ services:
             - caddy_data:/data
             - caddy_config:/config
         restart: always
+
+volumes: 
+    - caddy_data:
+    - caddy_config:
