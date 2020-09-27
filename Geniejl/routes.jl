@@ -16,7 +16,7 @@ route("/auth/*") do
   discordId = haskey(@params, :state) ? @params(:state) : 0
 
   user_check = findone(User; :discordId => discordId)
-  if length(user_check) != 0 do
+  if length(user_check) != 0
     return "User already exists!"
   end
 
