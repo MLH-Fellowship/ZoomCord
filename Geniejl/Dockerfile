@@ -7,5 +7,5 @@ RUN useradd --create-home --shell /bin/bash genie
 RUN mkdir /Geniejl
 WORKDIR /Geniejl
 
-RUN julia -e "using Pkg; Pkg.activate(\".\"); Pkg.instantiate(); Pkg.precompile(); "
+RUN julia -e "using Pkg; Pkg.activate(\".\"); Pkg.resolve(); Pkg.instantiate(); Pkg.precompile(); "
 
