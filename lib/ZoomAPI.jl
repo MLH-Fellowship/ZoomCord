@@ -2,7 +2,7 @@ using HTTP
 using JSON
 
 const headers = [
-    "Authorization" => ENV["ZOOM_JWT_TOKEN"],
+    "Authorization" => "Bearer " * ENV["ZOOM_JWT_TOKEN"],
     "Content-Type" => "application/json"
 ]
 
@@ -13,5 +13,5 @@ function create_meeting(userId)
         headers,
         "{\"topic\": \"test meeting\"}"
     )
-    return JSON.parse(String(result.body))["start_url"]
+    return JSON.parse(String(result.body))["join_url"]
 end
