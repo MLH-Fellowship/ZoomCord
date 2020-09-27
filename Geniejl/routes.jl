@@ -28,7 +28,7 @@ route("/auth/*") do
   refreshToken = r.body["refresh_token"]
   expiresIn = r.body["expires_in"]
 
-  user = User(:discordId = discordId, :accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
+  user = User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
   user |> save!
 
   serve_static_file("auth.html")
