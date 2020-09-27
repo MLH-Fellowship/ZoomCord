@@ -10,7 +10,7 @@ services:
         env_file: 
             - config.env
         command: >
-            sh -c "julia --project=/Geniejl -e \"using Pkg; Pkg.instantiate(); Pkg.precompile();\" &&
+            sh -c "julia --project=/Geniejl -e \"using Pkg; Pkg.instantiate(); Pkg.precompile(); using SearchLight; SearchLight.Migrations.last_up();\" &&
                     chmod +x bin/server &&
                     bin/server"
         restart: always
