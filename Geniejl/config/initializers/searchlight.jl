@@ -1,4 +1,5 @@
 using SearchLight
+using SearchLightSQLite
 
 try
   SearchLight.Configuration.load()
@@ -10,3 +11,5 @@ try
 catch ex
   @error ex
 end
+
+SearchLight.Migration.last_up()
