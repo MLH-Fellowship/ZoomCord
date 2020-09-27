@@ -2,6 +2,7 @@ using Genie.Router
 
 using HTTP
 using Base64
+using JSON
 
 using SearchLight
 using SearchLightSQLite
@@ -22,12 +23,14 @@ route("/auth/*") do
 
   auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
 
-  req = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml/auth/"; 
+  res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml/auth/"; 
   headers= ["Authorization" => "Basic $auth"])
 
-  accessToken = req.body["access_token"]
-  refreshToken = req.body["refresh_token"]
-  expiresIn = req.body["expires_in"]
+  body = JSON.parse(String(res.body))
+
+  accessToken = body["access_token"]
+  refreshToken = body["refresh_token"]
+  expiresIn = body["expires_in"]
 
   user = User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
   user |> save!
