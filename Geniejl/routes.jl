@@ -22,7 +22,7 @@ route("/auth/*") do
 
   auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
 
-  req = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml", ("Authorization" => "Basic $auth"))
+  req = HTTP.post("https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml", (("Authorization", "Basic $auth")))
 
   accessToken = r.body["access_token"]
   refreshToken = r.body["refresh_token"]
