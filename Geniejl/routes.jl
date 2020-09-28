@@ -16,7 +16,8 @@ end
 
 route("/auth/*") do 
   code = haskey(@params, :code) ? @params(:code) : ""
-  state = haskey(@params, :state) ? @params(:state) : Dict()
+  state = haskey(@params, :state) ? @params(:state) : "{}"
+  state = JSON.parse(state)
 
   discordId = haskey(state, :discordId) ? state[:discordId] : 0
   channelId = haskey(state, :channelId) ? state[:channelId] : 0
