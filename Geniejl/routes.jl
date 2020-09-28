@@ -23,10 +23,12 @@ route("/auth/*") do
   channelId = haskey(state, :channelId) ? state[:channelId] : 0
   messageId = haskey(state, :messageId) ? state[:messageId] : 0 
 
+  println(discordId)
+
   responsetype = haskey(@params, :response_type) ? @params(:response_type) == "code" : false
 
   if !responsetype
-    return serve_static_file("auth.html")
+    return "Already authorized"
   end
 
   user_check = findone(User; :discordId => discordId)
@@ -46,6 +48,7 @@ route("/auth/*") do
   expiresIn = body["expires_in"]
 
   user = Users.User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
+  println(user)
   user |> save!
 
   editMessage = @task begin
