@@ -5,6 +5,7 @@ using SearchLightSQLite
 
 using Base64
 
+using Zoom
 import Users
 
 c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
@@ -28,7 +29,8 @@ function handler(c::Client, e::MessageCreate)
             
             create(c, Message, dm_channel; embed=embed)
         else
-            reply(c, e.message, "Authorized")
+            meeting = create_meeting(user_check.accessToken, "Harr's Personal Meeting Room")
+            reply(c, e.message, meeting.join_url)
         end
     end
 end

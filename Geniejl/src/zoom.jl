@@ -3,28 +3,56 @@ module Zoom
 using HTTP
 using JSON
 
+using SearchLight
+using SearchLightSQLite
+using Base64
+import Users
+
 export create_meeting
 export Meeting
 
 @kwdef struct Meeting
-    meeting_id::int64
-    join_url::string
-    password::string
-    topic::string
+    meeting_id::Int64
+    join_url::String
+    password::String
+    topic::String
 end
 
-function create_meeting(accessToken::String, topic::String) 
+function refresh(user::Users.User)
+    if user.expiresIn > floor(time())
+        return user
+    end
+
+    auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
+
+    res = HTTP.request("POST",
+    "https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=$(user.refreshToken)";
+    headers = ["Authorization" => "Basic $auth"]
+    )
+
+    body = JSON.parse(String(res.body))
+
+    user.accessToken = body["access_token"]
+    user.refreshToken = body["refresh_token"]
+    user.expiresIn = body["expires_in"]
+
+    save!(user)
+end
+
+function create_meeting(user::Users.User, topic::String)
+    user = refresh(user)
+
     res = HTTP.request("POST", 
     "https://api.zoom.us/v2/users/me/meetings";
     headers = [
-        "Authorization" => "Bearer" * accessToken,
+        "Authorization" => "Bearer" * user.accessToken,
         "Content-Type" => "application/json"
     ];
     body=Dict("topic" => topic)
     )
 
-    res = JSON.parse(String(res.body))
+    body = JSON.parse(String(res.body))
 
-    Meeting(meeting_id = res["meeting_id"], join_url = res["join_url"],
-    password = res["password"], topic = res["topic"])
+    Meeting(meeting_id = body["meeting_id"], join_url = body["join_url"],
+    password = body["password"], topic = body["topic"])
 end
