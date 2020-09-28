@@ -8,13 +8,20 @@ using SearchLight
 using SearchLightSQLite
 using Users
 
+using Discord
+
 route("/") do
   serve_static_file("welcome.html")
 end
 
 route("/auth/*") do 
   code = haskey(@params, :code) ? @params(:code) : ""
-  discordId = haskey(@params, :state) ? @params(:state) : 0
+  state = haskey(@params, :state) ? @params(:state) : {}
+
+  discordId = haskey(state, :discordId) ? params(:discordId) : 0
+  channelId = haskey(state, :channelId) ? params(:channelId) : 0
+  messageId = haskey(state, :messageId) ? params(:messageId) : 0 
+
   responsetype = haskey(@params, :response_type) ? @params(:response_type) == "code" : false
 
   if !responsetype
@@ -39,6 +46,11 @@ route("/auth/*") do
 
   user = User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
   user |> save!
+
+  editMessage = @task begin
+    c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
+    
+  end
 
   serve_static_file("auth.html")
 end

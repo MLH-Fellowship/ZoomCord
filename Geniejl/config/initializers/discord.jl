@@ -3,14 +3,14 @@ using Discord
 using SearchLight
 using SearchLightSQLite
 
-import Main.Users
+import Users
 
 c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
 
 function handler(c::Client, e::MessageCreate)
     if e.message.content == "/zoom"
         discordId = e.message.author.id
-        user_check = findone(Main.Users.User; :discordId => discordId)
+        user_check = findone(Users.User; :discordId => discordId)
         if user_check === nothing
             reply(c, e.message, "Please check your DM to complete authorization! :smile:")
             
@@ -32,5 +32,3 @@ end
 add_handler!(c, MessageCreate, handler)
 
 open(c)
-
-wait(c)
