@@ -14,11 +14,11 @@ function handler(c::Client, e::MessageCreate)
         discordId = e.message.author.id
         user_check = findone(Users.User; :discordId => discordId)
         if user_check === nothing
-            reply(c, e.message, "Please check your DM to complete authorization! :smile:")
+            bot_msg = fetchval(reply(c, e.message, "Please check your DM to complete authorization! :smile:"))
             
             dm_channel = fetchval(create_dm(c; recipient_id=discordId))
 
-            state = base64encode("{\"discordId\": $discordId, \"channelId\": $(e.message.channel_id), \"messageId\": $(e.message.id)}")
+            state = base64encode("{\"discordId\": $discordId, \"channelId\": $(e.message.channel_id), \"messageId\": $(bot_msg.id)}")
 
             url = "https://zoom.us/oauth/authorize?response_type=code&client_id=3mNFRPZxSUjs8sqd7rzTg&redirect_uri=https%3A%2F%2Fzoomcord.ml%2Fauth%2F&state=$state"
             embed = Embed(title = "Authorize ZoomCord for Zoom meetings", 
