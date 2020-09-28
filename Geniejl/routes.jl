@@ -37,7 +37,7 @@ route("/auth/*") do
 
   accessToken = body["access_token"]
   refreshToken = body["refresh_token"]
-  expiresIn = body["expires_in"]
+  expiresIn = time() + 3500
 
   user = Users.User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
   user |> save!
