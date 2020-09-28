@@ -16,7 +16,7 @@ end
 
 route("/auth/*") do 
   code = haskey(@params, :code) ? @params(:code) : ""
-  state = haskey(@params, :state) ? @params(:state) : {}
+  state = haskey(@params, :state) ? @params(:state) : Dict()
 
   discordId = haskey(state, :discordId) ? state[:discordId] : 0
   channelId = haskey(state, :channelId) ? state[:channelId] : 0
@@ -55,6 +55,7 @@ route("/auth/*") do
 
     close(c)
   end
+  schedule(editMessage)
 
   serve_static_file("auth.html")
 end
