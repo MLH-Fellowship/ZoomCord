@@ -23,6 +23,7 @@ function handler(c::Client, e::MessageCreate)
             footer=EmbedFooter(text = "Click on the blue title to redirect to Zoom.", icon_url = "https://i.ibb.co/kKmfy1s/information-1.png"))
             
             create(c, Message, dm_channel; embed=embed)
+            create(c, Message, dm_channel; content="test")
         else
             reply(c, e.message, "Authorized")
         end
