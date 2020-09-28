@@ -3,6 +3,8 @@ using Discord
 using SearchLight
 using SearchLightSQLite
 
+using Base64
+
 import Users
 
 c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
@@ -16,7 +18,9 @@ function handler(c::Client, e::MessageCreate)
             
             dm_channel = fetchval(create_dm(c; recipient_id=discordId))
 
-            url = "https://zoom.us/oauth/authorize?response_type=code&client_id=3mNFRPZxSUjs8sqd7rzTg&redirect_uri=https%3A%2F%2Fzoomcord.ml%2Fauth%2F&state={\"discordId\": $discordId, \"channelId\": $(e.message.channel_id), \"messageId\": $(e.message.id)}"
+            state = base64encode("{\"discordId\": $discordId, \"channelId\": $(e.message.channel_id), \"messageId\": $(e.message.id)}")
+
+            url = "https://zoom.us/oauth/authorize?response_type=code&client_id=3mNFRPZxSUjs8sqd7rzTg&redirect_uri=https%3A%2F%2Fzoomcord.ml%2Fauth%2F&state=$state"
             embed = Embed(title = "Authorize ZoomCord for Zoom meetings", 
             description="Streamline your entire workflow through Discord. Easily start a meeting and share the link with every using the \"/zoom\" slash command. Schedule meetings and view your upcoming meetings directly in the Discord channel. Additionally get a meeting summary and know exactly when someone joined or left the meeting.", 
             url=url,
