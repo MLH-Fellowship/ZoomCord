@@ -6,7 +6,7 @@ using JSON
 
 using SearchLight
 using SearchLightSQLite
-using Users
+import Users
 
 using Discord
 
@@ -18,9 +18,9 @@ route("/auth/*") do
   code = haskey(@params, :code) ? @params(:code) : ""
   state = haskey(@params, :state) ? @params(:state) : {}
 
-  discordId = haskey(state, :discordId) ? params(:discordId) : 0
-  channelId = haskey(state, :channelId) ? params(:channelId) : 0
-  messageId = haskey(state, :messageId) ? params(:messageId) : 0 
+  discordId = haskey(state, :discordId) ? state[:discordId] : 0
+  channelId = haskey(state, :channelId) ? state[:channelId] : 0
+  messageId = haskey(state, :messageId) ? state[:messageId] : 0 
 
   responsetype = haskey(@params, :response_type) ? @params(:response_type) == "code" : false
 
@@ -44,12 +44,16 @@ route("/auth/*") do
   refreshToken = body["refresh_token"]
   expiresIn = body["expires_in"]
 
-  user = User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
+  user = Users.User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
   user |> save!
 
   editMessage = @task begin
     c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
-    
+    open(c)
+
+    edit_message(c, channelId, messageId; content="Authorization successful!")
+
+    close(c)
   end
 
   serve_static_file("auth.html")
