@@ -19,9 +19,9 @@ route("/auth/*") do
   state = haskey(@params, :state) ? @params(:state) : ""
   state = JSON.parse(String(base64decode(state)))
 
-  discordId = haskey(state, :discordId) ? state[:discordId] : 0
-  channelId = haskey(state, :channelId) ? state[:channelId] : 0
-  messageId = haskey(state, :messageId) ? state[:messageId] : 0 
+  discordId = haskey(state, "discordId") ? state["discordId"] : 0
+  channelId = haskey(state, "channelId") ? state["channelId"] : 0
+  messageId = haskey(state, "messageId") ? state["messageId"] : 0 
 
   println(discordId)
 
