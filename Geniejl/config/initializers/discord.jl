@@ -24,7 +24,7 @@ function handler(c::Client, e::MessageCreate)
             
             create(c, Message, dm_channel; embed=embed)
         else
-            
+            reply(c, e.message, "Authorized")
         end
     end
 end
