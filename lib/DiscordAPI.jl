@@ -7,7 +7,7 @@ include("./ZoomAPI.jl")
 const PREFIX = "/zoomcord "
 
 function create_cmd(client::Client, msg::Message)
-    response = create_meeting("-dmxbmG_TaabjaLuE9hCfw")
+    response = create_meeting("RCazfv6rSo6eBdoO4PXnWA")
     reply(client, msg, String(response))
 end
 

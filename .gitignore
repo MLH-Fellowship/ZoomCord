@@ -42,4 +42,4 @@ Thumbs.db
 node_modules/
 
 # Project related
-.env
+*.env
