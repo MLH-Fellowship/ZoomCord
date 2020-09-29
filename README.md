@@ -11,8 +11,6 @@ Streamline your entire workflow through Discord. Easily start a meeting and shar
 - Keep an eye on who joins or leaves your Zoom Meeting.
 - See the meeting and participant summary for your Zoom Meeting after it ends.
 
-**Note:** The first time you use the Zoom slash command in Discord, you will be asked to login to Zoom (if you are not already logged in) and approve the app's access to Zoom.
-
 <Screenshot placeholder here!!>
 
 ## Getting started
@@ -52,6 +50,16 @@ $> bin/server
 
 
 Access the app on `http://localhost:8000`
+
+## OAuth Workflow
+The first time you use the Zoom slash command in Discord, you will be asked to login to Zoom (if you are not already logged in) and approve the app's access to Zoom. 
+
+Zoom uses OAuth to allow an application to access user-authenticated data for use with third party applications which ZoomCord uses to create meetings and provide other features.
+The process is somewhat complex and is detailed in the image below:
+
+![Workflow](images/Workflow.png)
+
+
 
 ## Technology Stack
 
