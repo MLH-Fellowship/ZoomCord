@@ -6,7 +6,6 @@ using SearchLightSQLite
 using Base64
 
 include(joinpath(pwd(), "src/zoom.jl"))
-import Zoom
 import Users
 
 c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))

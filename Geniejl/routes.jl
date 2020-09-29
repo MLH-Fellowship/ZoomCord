@@ -28,6 +28,9 @@ route("/auth/*") do
     return "User already exists!"
   end
 
+  user = Users.User(discordId = discordId)
+  user = save!(user)
+
   auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
 
   res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml/auth/"; 
@@ -35,12 +38,11 @@ route("/auth/*") do
 
   body = JSON.parse(String(res.body))
 
-  accessToken = body["access_token"]
-  refreshToken = body["refresh_token"]
-  expiresIn = time() + 3500
-
-  user = Users.User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
-  user |> save!
+  user.accessToken = body["access_token"]
+  user.refreshToken = body["refresh_token"]
+  user.expiresIn = time() + 3500
+  
+  save!(user)
 
 
   c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
