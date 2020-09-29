@@ -59,6 +59,8 @@ The process is somewhat complex and is detailed in the image below:
 
 ![Workflow](images/Workflow.png)
 
+**Note:** The application is using JWT workflow until it is approved manually by Zoom.
+
 
 
 ## Technology Stack
