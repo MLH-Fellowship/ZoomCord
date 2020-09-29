@@ -26,17 +26,19 @@ route("/auth/*") do
   auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
 
   res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https%3A%2F%2Fzoomcord.ml%2Fauth%2F"; 
-  headers = ["Authorization" => "Basic $auth"])
+  headers = ["Authorization" => "Basic $auth"], redirect=false, status_exception=false)
+
+  if res.status >= 300
+    return "status_error"
+  end
 
   body = JSON.parse(String(res.body))
 
-  user = Users.User(discordId = discordId)
-  user = save!(user)
+  accessToken = body["access_token"]
+  refreshToken = body["refresh_token"]
+  expiresIn = time() + 3500
 
-  user.accessToken = body["access_token"]
-  user.refreshToken = body["refresh_token"]
-  user.expiresIn = time() + 3500
-  
+  user = Users.User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
   save!(user)
 
 
