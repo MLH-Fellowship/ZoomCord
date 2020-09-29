@@ -25,7 +25,7 @@ route("/auth/*") do
 
   auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
 
-  res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml/auth/"; 
+  res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https%3A%2F%2Fzoomcord.ml%2Fauth%2F"; 
   headers = ["Authorization" => "Basic $auth"])
 
   body = JSON.parse(String(res.body))
