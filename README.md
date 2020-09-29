@@ -11,7 +11,7 @@ Streamline your entire workflow through Discord. Easily start a meeting and shar
 - Keep an eye on who joins or leaves your Zoom Meeting.
 - See the meeting and participant summary for your Zoom Meeting after it ends.
 
-<Screenshot placeholder here!!>
+![Example Command](images/ZoomCommand.png)
 
 ## Getting started
 
