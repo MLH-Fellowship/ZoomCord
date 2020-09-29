@@ -28,25 +28,25 @@ route("/auth/*") do
   res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https%3A%2F%2Fzoomcord.ml%2Fauth%2F"; 
   headers = ["Authorization" => "Basic $auth"], redirect=false, status_exception=false)
 
-  body = JSON.parse(String(res.body))
+  if res.status <= 300
+    body = JSON.parse(String(res.body))
 
-  accessToken = body["access_token"]
-  refreshToken = body["refresh_token"]
-  expiresIn = time() + 3500
+    accessToken = body["access_token"]
+    refreshToken = body["refresh_token"]
+    expiresIn = time() + 3500
 
-  user = Users.User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
-  save!(user)
+    user = Users.User(discordId = discordId, accessToken = accessToken, refreshToken = refreshToken, expiresIn = expiresIn)
+    save!(user)
 
 
-  c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
-  open(c)
+    c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
+    open(c)
 
-  edit_message(c, channelId, messageId; content="Authorization successful!")
+    edit_message(c, channelId, messageId; content="Authorization successful!")
 
-  close(c)
-
-  if res.status >= 300
-    return "status_error"
+    close(c)
+  else
+    return "status error"
   end
   
   serve_static_file("auth.html")
