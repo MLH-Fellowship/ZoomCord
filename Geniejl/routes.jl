@@ -23,20 +23,15 @@ route("/auth/*") do
   channelId = haskey(state, "channelId") ? state["channelId"] : 0
   messageId = haskey(state, "messageId") ? state["messageId"] : 0
 
-  user_check = findone(Users.User; :discordId => discordId)
-  if user_check !== nothing
-    return "User already exists!"
-  end
-
-  user = Users.User(discordId = discordId)
-  user = save!(user)
-
   auth = base64encode("$(ENV["ZOOM_CLIENT_ID"]):$(ENV["ZOOM_CLIENT_SECRET"])")
 
   res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https://zoomcord.ml/auth/"; 
   headers = ["Authorization" => "Basic $auth"])
 
   body = JSON.parse(String(res.body))
+
+  user = Users.User(discordId = discordId)
+  user = save!(user)
 
   user.accessToken = body["access_token"]
   user.refreshToken = body["refresh_token"]
