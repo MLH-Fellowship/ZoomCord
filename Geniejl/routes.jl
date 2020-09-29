@@ -28,10 +28,6 @@ route("/auth/*") do
   res = HTTP.request("POST", "https://zoom.us/oauth/token?grant_type=authorization_code&code=$code&redirect_uri=https%3A%2F%2Fzoomcord.ml%2Fauth%2F"; 
   headers = ["Authorization" => "Basic $auth"], redirect=false, status_exception=false)
 
-  if res.status >= 300
-    return "status_error"
-  end
-
   body = JSON.parse(String(res.body))
 
   accessToken = body["access_token"]
@@ -48,6 +44,10 @@ route("/auth/*") do
   edit_message(c, channelId, messageId; content="Authorization successful!")
 
   close(c)
+
+  if res.status >= 300
+    return "status_error"
+  end
   
   serve_static_file("auth.html")
 end
