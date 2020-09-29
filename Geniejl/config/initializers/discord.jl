@@ -5,7 +5,8 @@ using SearchLightSQLite
 
 using Base64
 
-include(joinpath(pwd(), "src/zoom.jl"))
+
+using Zoom
 import Users
 
 c = Client(ENV["DISCORD_CLIENT_TOKEN"]; presence=(game=(name="with Discord.jl", type=AT_GAME), ))
@@ -29,7 +30,7 @@ function handler(c::Client, e::MessageCreate)
             
             create(c, Message, dm_channel; embed=embed)
         else
-            meeting = Zoom.create_meeting(user_check, "Maaz's Personal Meeting Room")
+            meeting = create_meeting(user_check, "Maaz's Personal Meeting Room")
             embed = Embed(title=meeting.topic, 
             fields=[
                 EmbedField(name = "Meeting ID", value = string(meeting.id)),
