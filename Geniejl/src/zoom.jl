@@ -1,5 +1,6 @@
 module Zoom
 
+import Base: @kwdef
 using HTTP
 using JSON
 
@@ -8,11 +9,10 @@ using SearchLightSQLite
 using Base64
 import Users
 
-export create_meeting
-export Meeting
+export create_meeting, Meeting
 
 @kwdef struct Meeting
-    meeting_id::Int64
+    id::Int64
     join_url::String
     password::String
     topic::String
@@ -47,12 +47,14 @@ function create_meeting(user::Users.User, topic::String)
     headers = [
         "Authorization" => "Bearer" * user.accessToken,
         "Content-Type" => "application/json"
-    ];
-    body=Dict("topic" => topic)
+    ],
+    body=JSON.json(Dict("topic" => topic))
     )
 
     body = JSON.parse(String(res.body))
 
-    Meeting(meeting_id = body["meeting_id"], join_url = body["join_url"],
+    Meeting(id = body["id"], join_url = body["join_url"],
     password = body["password"], topic = body["topic"])
+end
+
 end
